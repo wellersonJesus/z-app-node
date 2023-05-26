@@ -1,9 +1,6 @@
 const inquirer = require("inquirer");
 
 const sendMessage = require("../services/send-message");
-const sendAudio = require("../services/send-audio");
-const sendImage = require("../services/send-image");
-const sendVideo = require("../services/send-video");
 
 const initQuestions = (INSTANCE_API) => {
   if (!INSTANCE_API) {
@@ -11,23 +8,18 @@ const initQuestions = (INSTANCE_API) => {
       `Informe a API da instância no arquivo index.js e execute novamente.`
     );
   }
-  inquirer
-    .prompt([
-      // restante do código...
-    ])
-    .then((answers) => {
-      switch (answers.messageType) {
-        case "Mensagem":
-          sendMessage.sendTextMessage(
-            INSTANCE_API,
-            answers.phone,
-            answers.message
-          );
-          break;
-        case "Imagem":
-        // restante do código...
-      }
-    });
+  inquirer.prompt([]).then((answers) => {
+    switch (answers.messageType) {
+      case "Mensagem":
+        sendMessage.sendTextMessage(
+          INSTANCE_API,
+          answers.phone,
+          answers.message
+        );
+        break;
+      case "Imagem":
+    }
+  });
 };
 
 module.exports = { initQuestions };

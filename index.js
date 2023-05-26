@@ -4,8 +4,8 @@ const { sendButtonActions } = require("../z-app-nodejs/services/send-menu");
 const { initQuestions } = require("./prompt/questions");
 
 const INSTANCE_API = process.env.INSTANCE_API;
-const phone = "554499999999";
-const message = "uma mensagem";
+const phone = "5531999448369";
+const message = "WhatsApp Server";
 
 const startApp = async () => {
   try {
@@ -17,6 +17,5 @@ const startApp = async () => {
 
 startApp();
 
-// Use as funções conforme necessário
 sendMessage(INSTANCE_API, phone, message);
 sendButtonActions();
