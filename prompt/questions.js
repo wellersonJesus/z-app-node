@@ -1,13 +1,11 @@
 require("dotenv").config();
-
 const inquirer = require("inquirer");
 const { sendMessage } = require("../services/send-message");
-const axios = require("axios");
+const { sendButtonActions } = require("../services/send-button");
+const { sendMenuMessage } = require("../services/send-menu-message");
 
-const initQuestions = () => {
-  const INSTANCE_API = process.env.INSTANCE_API;
-
-  if (!INSTANCE_API) {
+const initQuestions = (instanceAPI) => {
+  if (!instanceAPI) {
     return console.error(
       "Informe a API da instância no arquivo index.js e execute novamente."
     );
@@ -19,7 +17,14 @@ const initQuestions = () => {
         type: "list",
         name: "messageType",
         message: "O que deseja testar?",
-        choices: ["Mensagem", "Imagem", "Audio", "Video", "Menu"],
+        choices: [
+          "Mensagem",
+          "Imagem",
+          "Audio",
+          "Video",
+          "Menu",
+          "MenuMessage",
+        ],
       },
       {
         type: "input",
@@ -63,7 +68,7 @@ const initQuestions = () => {
             done(null, true);
           } else {
             done(
-              "Por favor, digite o destinatário com DDI, DDD e número. Exemplo: 5544999999999"
+              "Por favor, digite o destinatário com DDI, DDD e número. Exemplo: 5531999448369"
             );
           }
         },
@@ -72,7 +77,7 @@ const initQuestions = () => {
     .then((answers) => {
       switch (answers.messageType) {
         case "Mensagem":
-          sendMessage(INSTANCE_API, answers.phone, answers.message)
+          sendMessage(instanceAPI, answers.phone, answers.message)
             .then(() => console.log("Mensagem enviada com sucesso."))
             .catch((error) =>
               console.error("Erro ao enviar a mensagem:", error)
@@ -80,7 +85,7 @@ const initQuestions = () => {
           break;
         case "Imagem":
           sendImage(
-            INSTANCE_API,
+            instanceAPI,
             answers.phone,
             answers.fileURL ||
               "https://static.mundoeducacao.bol.uol.com.br/mundoeducacao/conteudo/sai-verde.jpg"
@@ -88,7 +93,7 @@ const initQuestions = () => {
           break;
         case "Audio":
           sendAudio(
-            INSTANCE_API,
+            instanceAPI,
             answers.phone,
             answers.fileURL ||
               "https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3"
@@ -96,51 +101,21 @@ const initQuestions = () => {
           break;
         case "Video":
           sendVideo(
-            INSTANCE_API,
+            instanceAPI,
             answers.phone,
             answers.fileURL ||
               "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"
           );
           break;
         case "Menu":
-          const menuOptions = {
-            method: "POST",
-            url: `https://api.z-api.io/instances/${process.env.INSTANCE_ID}/token/${process.env.INSTANCE_TOKEN}/send-button-actions`,
-            headers: { "content-type": "application/json" },
-            body: {
-              phone: answers.phone,
-              message: answers.message,
-              title: "se quiser vincular um titulo",
-              footer: "se quiser vincular um rodape top",
-              buttonActions: [
-                {
-                  id: "1",
-                  type: "CALL",
-                  phone: "+554498398733",
-                  label: "Fale conosco",
-                },
-                {
-                  id: "2",
-                  type: "URL",
-                  url: "https://z-api.io",
-                  label: "Visite nosso site",
-                },
-                { id: "3", type: "REPLY", label: "Falar com atendente" },
-              ],
-            },
-            json: true,
-          };
-
-          request(menuOptions, function (error, response, body) {
-            if (error) {
-              console.error("Erro ao enviar o menu:", error);
-              return;
-            }
-
-            console.log("Menu enviado com sucesso.");
-            console.log(body);
-          });
-
+          sendButtonActions(instanceAPI, answers.phone, answers.message)
+            .then(() => console.log("Menu enviado com sucesso."))
+            .catch((error) => console.error("Erro ao enviar o menu:", error));
+          break;
+        case "MenuMessage":
+          sendMenuMessage(instanceAPI, answers.phone, answers.message)
+            .then(() => console.log("Message Menu enviado com sucesso."))
+            .catch((error) => console.error("Erro ao enviar o menu:", error));
           break;
       }
     })
