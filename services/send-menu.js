@@ -1,8 +1,9 @@
 const axios = require("axios");
-const {
-  sendMessage,
-  generateProtocolNumber,
-} = require("../services/send-message");
+const { sendMessage } = require("../services/send-message");
+
+const generateProtocolNumber = () => {
+  return Math.floor(10000000 + Math.random() * 90000000);
+};
 
 const sendButtonActions = () => {
   const protocolNumber = generateProtocolNumber();
@@ -13,7 +14,7 @@ const sendButtonActions = () => {
     headers: { "content-type": "application/json" },
     data: {
       phone: "5531999448369",
-      message: "Seu protocolo de atendimento:\n👇👇👇\n\n",
+      message: `Seu protocolo de atendimento:\n👇👇👇\n\n${protocolNumber}`,
       title:
         "Bem-vindo! Ao atendimento Virtual\n\n👨‍💻 Por gentileza,\nSelecione uma opção desejada do menu logo abaixo:\n\n",
       footer: `Protocolo: ${protocolNumber}`,
@@ -40,10 +41,15 @@ const sendButtonActions = () => {
       const message = `Opção selecionada: ${
         selectedAction ? selectedAction.label : "N/A"
       }`;
-      return sendMessage(options.data.phone, message).then(() => {
-        console.log("Mensagem enviada com sucesso.");
-        return response;
-      });
+      return sendMessage(options.data.phone, message)
+        .then(() => {
+          console.log("Mensagem enviada com sucesso.");
+          return response;
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar a mensagem:", error);
+          throw error;
+        });
     })
     .catch((error) => {
       console.error("Ocorreu um erro:", error);

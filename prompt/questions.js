@@ -19,7 +19,7 @@ const initQuestions = () => {
         type: "list",
         name: "messageType",
         message: "O que deseja testar?",
-        choices: ["Mensagem", "Menu"],
+        choices: ["Mensagem", "Imagem", "Audio", "Video", "Menu"],
       },
       {
         type: "input",
@@ -63,7 +63,7 @@ const initQuestions = () => {
             done(null, true);
           } else {
             done(
-              "Por favor, digite o destinatário com DDI, DDD e número. Exemplo: 5531999448369"
+              "Por favor, digite o destinatário com DDI, DDD e número. Exemplo: 5544999999999"
             );
           }
         },
@@ -84,6 +84,22 @@ const initQuestions = () => {
             answers.phone,
             answers.fileURL ||
               "https://static.mundoeducacao.bol.uol.com.br/mundoeducacao/conteudo/sai-verde.jpg"
+          );
+          break;
+        case "Audio":
+          sendAudio(
+            INSTANCE_API,
+            answers.phone,
+            answers.fileURL ||
+              "https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3"
+          );
+          break;
+        case "Video":
+          sendVideo(
+            INSTANCE_API,
+            answers.phone,
+            answers.fileURL ||
+              "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"
           );
           break;
         case "Menu":
