@@ -81,7 +81,7 @@ const initQuestions = () => {
         case "Menu":
           const menuOptions = {
             method: "POST",
-            url: `https://api.z-api.io/instances/${process.env.INSTANCE_ID}/token/${process.env.INSTANCE_TOKEN}/send-button-actions`,
+            url: `http://localhost:4001/instances/${process.env.INSTANCE_ID}/token/${process.env.INSTANCE_TOKEN}/send-button-actions`,
             headers: { "content-type": "application/json" },
             data: {
               phone: answers.phone,

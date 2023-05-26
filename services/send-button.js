@@ -1,31 +1,8 @@
 const axios = require("axios");
-
-const generateProtocolNumber = () => {
-  const protocolNumber = Math.floor(10000000 + Math.random() * 90000000);
-  return protocolNumber.toString();
-};
-
-const sendMessage = (apiUrl, phone, message) => {
-  const options = {
-    method: "POST",
-    url: apiUrl,
-    headers: { "content-type": "application/json" },
-    data: {
-      phone,
-      message,
-    },
-  };
-
-  return axios
-    .post(options.url, options.data, { headers: options.headers })
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      throw new Error(error);
-    });
-};
+const {
+  sendMessage,
+  generateProtocolNumber,
+} = require("../services/send-message");
 
 const sendButtonActions = () => {
   const protocolNumber = generateProtocolNumber();
@@ -63,11 +40,7 @@ const sendButtonActions = () => {
       const message = `Opção selecionada: ${
         selectedAction ? selectedAction.label : "N/A"
       }`;
-      return sendMessage(
-        process.env.INSTANCE_API,
-        options.data.phone,
-        message
-      ).then(() => {
+      return sendMessage(options.data.phone, message).then(() => {
         console.log("Mensagem enviada com sucesso.");
         return response;
       });

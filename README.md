@@ -30,16 +30,5 @@ npm install
 npm install axios@latest
 npm install inquirer@latest
 npm install dotenv
-```
-
-- model menssage
-
-```bash
-"Ok, sua opção (PEDIDOS DE CERTIDÃO) foi enviada com sucesso. Aguarde o atendimento.";
-
-"📋 *Bem-vindo(a) ao menu de opções*:\n👇👇👇\n\n" +
-"1 - CONSULTA ATOS\n" +
-"2 - FIRMAS\n" +
-"3 - ESCRITURAS E PROCURAÇÕES\n" +
-"4 - PEDIDOS DE CERTIDÃO\n"
+npm install qrcode-terminal
 ```
