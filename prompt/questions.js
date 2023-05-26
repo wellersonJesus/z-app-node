@@ -19,7 +19,7 @@ const initQuestions = () => {
         type: "list",
         name: "messageType",
         message: "O que deseja testar?",
-        choices: ["Mensagem", "Imagem", "Menu"],
+        choices: ["Mensagem", "Menu"],
       },
       {
         type: "input",
@@ -78,12 +78,20 @@ const initQuestions = () => {
               console.error("Erro ao enviar a mensagem:", error)
             );
           break;
+        case "Imagem":
+          sendImage(
+            INSTANCE_API,
+            answers.phone,
+            answers.fileURL ||
+              "https://static.mundoeducacao.bol.uol.com.br/mundoeducacao/conteudo/sai-verde.jpg"
+          );
+          break;
         case "Menu":
           const menuOptions = {
             method: "POST",
-            url: `http://localhost:4001/instances/${process.env.INSTANCE_ID}/token/${process.env.INSTANCE_TOKEN}/send-button-actions`,
+            url: `https://api.z-api.io/instances/${process.env.INSTANCE_ID}/token/${process.env.INSTANCE_TOKEN}/send-button-actions`,
             headers: { "content-type": "application/json" },
-            data: {
+            body: {
               phone: answers.phone,
               message: answers.message,
               title: "se quiser vincular um titulo",
@@ -104,16 +112,18 @@ const initQuestions = () => {
                 { id: "3", type: "REPLY", label: "Falar com atendente" },
               ],
             },
+            json: true,
           };
 
-          axios(menuOptions)
-            .then((response) => {
-              console.log("Menu enviado com sucesso.");
-              console.log(response.data);
-            })
-            .catch((error) =>
-              console.error("Erro ao enviar o menu:", error.response.data)
-            );
+          request(menuOptions, function (error, response, body) {
+            if (error) {
+              console.error("Erro ao enviar o menu:", error);
+              return;
+            }
+
+            console.log("Menu enviado com sucesso.");
+            console.log(body);
+          });
 
           break;
       }
