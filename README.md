@@ -31,4 +31,5 @@ npm install axios@latest
 npm install inquirer@latest
 npm install dotenv
 npm install qrcode-terminal
+npm install node-fetch@latest
 ```
