@@ -32,4 +32,5 @@ npm install inquirer@latest
 npm install dotenv
 npm install qrcode-terminal
 npm install node-fetch@latest
+npm install -g nodemon
 ```
